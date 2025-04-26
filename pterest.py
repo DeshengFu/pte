@@ -46,8 +46,8 @@ class PteRestBasicTest(pte.PteTest):
 
 class PteRestJsonTest(PteRestBasicTest):
     
-    def __init__(self, testSuite, name, skip = False, fun = None, url = "http://localhost/", method = "get", headers = {}, cookies = {}, data = {}, expCode = 200, expText = {}, timeout = 0.01):
-        super().__init__(testSuite, name, skip, fun, url, method, headers, cookies, json.dumps(data), expCode, json.dumps(expText), timeout)
+    def __init__(self, testSuite, name, skip = False, fun = None, url = "http://localhost/", method = "get", headers = {}, cookies = {}, data = {}, expCode = 200, expJSON = {}, timeout = 0.01):
+        super().__init__(testSuite, name, skip, fun, url, method, headers, cookies, json.dumps(data), expCode, json.dumps(expJSON), timeout)
 
     def compareText(text1, text2):
         text1Json = json.loads(text1)

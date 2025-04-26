@@ -22,8 +22,8 @@ _startTime = -1
 _endTime = -1
 
 _increasingTotal = True
-_totalTestSuites = -1
-_totalTests = -1
+_totalTestSuites = 0
+_totalTests = 0
 
 _passedTestSuites = 0
 _failedTestSuites = 0
