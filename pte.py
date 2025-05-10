@@ -128,6 +128,14 @@ def _writeState(isRunning = True):
         with open(_stateFile, 'w') as f:
             json.dump(data, f)
     logger.debug("State: ", **data)
+    if not isRunning:
+        logger.info("")
+        logger.info("")
+        logger.info("======================================================")
+        logger.info("Total time: %.2f seconds.", _endTime - _startTime)
+        logger.info("Failed tests: %u / %u.", _failedTests, _totalTests)
+        logger.info("Failed test suites: %u / %u.", _failedTestSuites, _totalTestSuites)
+        logger.info("======================================================")
 
 
 
@@ -159,12 +167,17 @@ class PteTestSuite:
         if self.skip:
             _skippedTestSuites += 1
             if not _scanRun:
+                logger.info("======================================================")
                 logger.info("[SKIP ] Test suite: %s.", self.name)
+                logger.info("======================================================")
+                logger.info("")
             return
         
         if not _dryRun:
             self.initialize()
-
+        
+        logger.info("")
+        logger.info("======================================================")
         i = 1
         for test in self.tests:
             if not _scanRun:
@@ -193,11 +206,17 @@ class PteTestSuite:
         if self.failedTests == 0:
             _passedTestSuites += 1
             if not _scanRun:
+                logger.info("======================================================")
                 logger.info("[OKAY ] Test suite: %s (%u tests).", self.name, len(self.tests))
+                logger.info("======================================================")
+                logger.info("")
         else:
             _failedTestSuites += 1
             if not _scanRun:
-                logger.info("[ERROR] Test suite: %s (%u tests).", self.name, len(self.tests))
+                logger.error("======================================================")
+                logger.error("[ERROR] Test suite: %s (%u tests).", self.name, len(self.tests))
+                logger.error("======================================================")
+                logger.error("")
 
 
 
