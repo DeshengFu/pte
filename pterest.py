@@ -5,7 +5,6 @@ import os
 
 # Import own libraries
 import pte
-import ptsys
 
 
 
@@ -13,7 +12,7 @@ class PteRestBasicTest(pte.PteTest):
     
     def __init__(self, testSuite, name, skip = False, fun = None, url = "http://localhost/", method = "get", headers = {}, cookies = {}, data = None, expCode = 200, expText = '', timeout = 0.01):
         super().__init__(testSuite, name, skip, fun)
-        self.url = ptsys.config['base'] + url
+        self.url = url
         self.method = method
         self.headers = headers
         self.cookies = cookies
@@ -34,6 +33,8 @@ class PteRestBasicTest(pte.PteTest):
             pte.logger.error("  Expected: %u.", self.expCode)
             pte.logger.error("  Received: %u.", self.response.status_code)
             return False
+        if self.expCode < 200 or self.expCode > 299:
+            return True
         if not self.compareText(self.response.text, self.expText):
             pte.logger.error("  Invalid response.")
             pte.logger.error("  Expected: \n%s.", self.expText)

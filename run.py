@@ -8,7 +8,8 @@ import pte
 
 dryRun = False
 scanRun = True
-path = 'tests'
+testPath = 'tests'
+runPath = None
 stateFile = None
 for i in range(1, len(sys.argv)):
     arg = sys.argv[i]
@@ -16,9 +17,13 @@ for i in range(1, len(sys.argv)):
         dryRun = True
     elif arg == '-ns' or arg == '--no-scan':
         scanRun = False
-    elif (arg == '-p' or arg == '--path') and i + 1 < len(sys.argv):
-        path = sys.argv[i + 1]
+    elif (arg == '-rp' or arg == '--run-path') and i + 1 < len(sys.argv):
+        runPath = sys.argv[i + 1]
+    elif (arg == '-tp' or arg == '--test-path') and i + 1 < len(sys.argv):
+        testPath = sys.argv[i + 1]
     elif (arg == '-s' or arg == '--state-file') and i + 1 < len(sys.argv):
         stateFile = sys.argv[i + 1]
+if runPath is None:
+    runPath = testPath
 
-pte.run(path, dryRun, scanRun, stateFile)
+pte.run(testPath, runPath, dryRun, scanRun, stateFile)

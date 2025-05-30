@@ -1,0 +1,9 @@
+{
+    "base": "http://localhost",
+    "initCmd": [
+        ["sleep", "2"]
+    ],
+    "uninitCmd": [
+        ["sleep", "2"]
+    ]
+}

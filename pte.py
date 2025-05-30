@@ -46,7 +46,7 @@ def _initLogger():
 
 
 
-def run(testPath = 'tests', dryRun = False, scanRun = True, stateFile = None):
+def run(testPath = 'tests', runPath = 'tests', dryRun = False, scanRun = True, stateFile = None):
 
     global _stateFile, _startTime, _endTime, _scanRun, _dryRun, _increasingTotal
     global _skippedTestSuites, _passedTestSuites, _failedTestSuites, _skippedTests, _passedTests, _failedTests
@@ -64,7 +64,7 @@ def run(testPath = 'tests', dryRun = False, scanRun = True, stateFile = None):
     if scanRun:
         _scanRun = True
         _dryRun = True
-        _runPath(testPath)
+        _runPath(testPath, runPath)
 
     # Run
     _scanRun = False
@@ -78,7 +78,7 @@ def run(testPath = 'tests', dryRun = False, scanRun = True, stateFile = None):
     _failedTests = 0
     _skippedTests = 0
         
-    _runPath(testPath)
+    _runPath(testPath, runPath)
 
     # Stop and write final state file
     _endTime = time.time()
@@ -86,17 +86,35 @@ def run(testPath = 'tests', dryRun = False, scanRun = True, stateFile = None):
 
 
 
-def _runPath(testPath):
+def _runPath(testPath, runPath):
     logger.debug("Searching test suite in: %s", testPath)
 
+    absTestPath = os.path.abspath(testPath)
+    absRunPath = os.path.abspath(runPath)
+    testUnderRun = testPath == runPath or testPath.startswith(runPath + os.sep)
+    runUnderTest = testPath == runPath or runPath.startswith(testPath + os.sep)
+
+    if not (testUnderRun or runUnderTest):
+        return
+    ifrun = testUnderRun
+
+    if os.path.isfile(testPath + '/_initialize.py'):
+        _runFile(testPath + '/_initialize.py')
+
     with os.scandir(testPath) as it:
-        for entry in it:
-            if entry.name.startswith('_'):
-                continue
-            if not entry.is_file():
-                _runPath(entry.path)
-            elif entry.name.endswith('.py'):
-                _runFile(entry.path)
+        fd = list(it)
+        fd.sort(key=lambda e: e.name)
+
+    for entry in fd:
+        if entry.name.startswith('_'):
+            continue
+        if not entry.is_file():
+            _runPath(entry.path, runPath)
+        elif ifrun and entry.name.endswith('.py'):
+            _runFile(entry.path)
+
+    if os.path.isfile(testPath + '/_uninitialize.py'):
+        _runFile(testPath + '/_uninitialize.py')
 
 
 
@@ -176,8 +194,9 @@ class PteTestSuite:
         if not _dryRun:
             self.initialize()
         
-        logger.info("")
-        logger.info("======================================================")
+        if not _scanRun:
+            logger.info("")
+            logger.info("======================================================")
         i = 1
         for test in self.tests:
             if not _scanRun:

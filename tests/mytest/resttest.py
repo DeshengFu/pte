@@ -8,4 +8,4 @@ testSuite = TestSuite()
 def run():
     testSuite.run()
 
-test1 = pterest.PteRestJsonTest(testSuite, "JSON Test", url="http://localhost/", method="get", expJSON='')
+test1 = pterest.PteRestJsonTest(testSuite, "JSON Test", url="http://localhost", method="get", expJSON={})
