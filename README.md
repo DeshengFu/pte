@@ -162,6 +162,7 @@ Available classes:
 
 - `PteRestBasicTest`: tests raw string responses.
 - `PteRestJsonTest`: tests JSON responses. Ignores formatting and key order differences.
+- `PteRestBasicFileTest`: compares raw string responses with content in an external file.
 - `PteRestJsonFileTest`: compares JSON responses with content in an external file.
 
 For more details, refer to `pterest.py`.

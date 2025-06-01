@@ -37,6 +37,8 @@ _skippedTests = 0
 # Define variables
 logger = None
 
+shared = {}
+
 
 
 def _initLogger():
@@ -126,7 +128,7 @@ def _runFile(testFile):
     module.run()
     logger.debug("Processed test suite %s", moduleName)
 
-    if time.time() - _stateTime > 1000:
+    if time.time() - _stateTime > 10:
         _writeState(True)
 
 
@@ -151,8 +153,12 @@ def _writeState(isRunning = True):
         logger.info("")
         logger.info("======================================================")
         logger.info("Total time: %.2f seconds.", _endTime - _startTime)
-        logger.info("Failed tests: %u / %u.", _failedTests, _totalTests)
-        logger.info("Failed test suites: %u / %u.", _failedTestSuites, _totalTestSuites)
+        if _failedTests > 0:
+            logger.error("Failed tests: %u / %u.", _failedTests, _totalTests)
+            logger.error("Failed test suites: %u / %u.", _failedTestSuites, _totalTestSuites)
+        else:
+            logger.info("Failed tests: %u / %u.", _failedTests, _totalTests)
+            logger.info("Failed test suites: %u / %u.", _failedTestSuites, _totalTestSuites)
         logger.info("======================================================")
 
 
