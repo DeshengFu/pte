@@ -10,7 +10,7 @@ import pte
 
 class PteRestBasicTest(pte.PteTest):
     
-    def __init__(self, testSuite, name, skip = False, fun = None, url = 'http://localhost/', method = 'get', headers = {}, cookies = {}, data = None, expCode = 200, expText = '', timeout = 0.01):
+    def __init__(self, testSuite, name, skip = False, fun = None, url = 'http://localhost/', method = 'get', headers = {}, cookies = {}, data = None, expCode = 200, expText = '', timeout = 1):
         super().__init__(testSuite, name, skip, fun)
         self.url = url
         self.method = method
@@ -53,7 +53,8 @@ class PteRestBasicTest(pte.PteTest):
 
 class PteRestJsonTest(PteRestBasicTest):
     
-    def __init__(self, testSuite, name, skip = False, fun = None, url = 'http://localhost/', method = 'get', headers = {}, cookies = {}, data = {}, expCode = 200, expJSON = {}, timeout = 0.1):
+    def __init__(self, testSuite, name, skip = False, fun = None, url = 'http://localhost/', method = 'get', headers = {}, cookies = {}, data = {}, expCode = 200, expJSON = {}, timeout = 1):
+        headers['Content-Type'] = 'application/json; charset=utf-8'
         super().__init__(testSuite, name, skip, fun, url, method, headers, cookies, json.dumps(data), expCode, json.dumps(expJSON), timeout)
 
     def compareText(self, text1, text2):
@@ -78,7 +79,7 @@ class PteRestJsonTest(PteRestBasicTest):
 
 class PteRestBasicFileTest(PteRestBasicTest):
     
-    def __init__(self, testSuite, name, skip = False, fun = None, url = 'http://localhost/', method = 'get', headers = {}, cookies = {}, data = None, expCode = 200, scriptPath = '', expText = '', timeout = 0.01):
+    def __init__(self, testSuite, name, skip = False, fun = None, url = 'http://localhost/', method = 'get', headers = {}, cookies = {}, data = None, expCode = 200, scriptPath = '', expText = '', timeout = 1):
         d = ''
         path = os.path.abspath(os.path.dirname(scriptPath) + expText)
         with open(path) as f:
@@ -89,7 +90,7 @@ class PteRestBasicFileTest(PteRestBasicTest):
 
 class PteRestJsonFileTest(PteRestJsonTest):
     
-    def __init__(self, testSuite, name, skip = False, fun = None, url = 'http://localhost/', method = 'get', headers = {}, cookies = {}, data = {}, expCode = 200, scriptPath = '', expJSON = '', timeout = 0.1):
+    def __init__(self, testSuite, name, skip = False, fun = None, url = 'http://localhost/', method = 'get', headers = {}, cookies = {}, data = {}, expCode = 200, scriptPath = '', expJSON = '', timeout = 1):
         d = {}
         path = os.path.abspath(os.path.dirname(scriptPath) + expJSON)
         with open(path) as f:

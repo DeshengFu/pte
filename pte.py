@@ -3,7 +3,6 @@ import importlib
 import json
 import logging
 import os
-import requests
 import time
 
 # Import 3rd-party libraries
@@ -91,8 +90,6 @@ def run(testPath = 'tests', runPath = 'tests', dryRun = False, scanRun = True, s
 def _runPath(testPath, runPath):
     logger.debug("Searching test suite in: %s", testPath)
 
-    absTestPath = os.path.abspath(testPath)
-    absRunPath = os.path.abspath(runPath)
     testUnderRun = testPath == runPath or testPath.startswith(runPath + os.sep)
     runUnderTest = testPath == runPath or runPath.startswith(testPath + os.sep)
 
